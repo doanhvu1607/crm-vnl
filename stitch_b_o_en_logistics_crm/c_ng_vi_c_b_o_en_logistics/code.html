@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #EDF2F4;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked {
+            background-color: #D90429;
+            border-color: #D90429;
+        }
+        .custom-checkbox:checked::after {
+            content: 'check';
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#191c1d",
+                        "on-tertiary-fixed-variant": "#3c475a",
+                        "secondary": "#5b5d74",
+                        "on-background": "#191c1d",
+                        "on-primary-container": "#ffeae8",
+                        "surface-container-highest": "#e1e3e4",
+                        "primary-container": "#d90429",
+                        "on-primary-fixed": "#410005",
+                        "surface-bright": "#f8f9fa",
+                        "outline-variant": "#e7bcba",
+                        "primary": "#ac001e",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "primary-fixed-dim": "#ffb3af",
+                        "on-surface-variant": "#5d3f3d",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "outline": "#926e6c",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f0f1f2",
+                        "tertiary-container": "#616d81",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#5f6178",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#ddddf9",
+                        "on-tertiary-fixed": "#101c2c",
+                        "tertiary-fixed": "#d7e3fa",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdad7",
+                        "on-tertiary-container": "#e8efff",
+                        "on-primary-fixed-variant": "#930018",
+                        "surface": "#f8f9fa",
+                        "secondary-fixed": "#e0e0fc",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#495567",
+                        "surface-variant": "#e1e3e4",
+                        "surface-tint": "#bf0022",
+                        "on-secondary-fixed": "#181a2e",
+                        "background": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#43455b",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#bbc7dd",
+                        "inverse-surface": "#2e3132",
+                        "surface-dim": "#d9dadb",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#c4c4df",
+                        "inverse-primary": "#ffb3af"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "32px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "sidebar-width": "280px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["13px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "body-md": ["14px", {"lineHeight": "22.4px", "fontWeight": "300"}],
+                        "headline-md": ["22px", {"lineHeight": "28px", "fontWeight": "300"}],
+                        "body-sm": ["12px", {"lineHeight": "19.2px", "fontWeight": "300"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 border-r border-outline-variant bg-surface-container-lowest flex flex-col py-stack-lg shadow-[0px_10px_30px_rgba(43,45,66,0.05)] z-50">
+<div class="px-stack-lg mb-10">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Báo Đen Logistics</h1>
+<p class="font-label-md text-label-md text-secondary uppercase tracking-widest mt-1">Logistics Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-stack-md py-4 px-stack-lg text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Tổ chức
+            </a>
+<a class="flex items-center gap-stack-md py-4 px-stack-lg text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Khách hàng
+            </a>
+<a class="flex items-center gap-stack-md py-4 px-stack-lg text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="handshake">handshake</span>
+                Cơ hội
+            </a>
+<!-- Active Tab: Công việc -->
+<a class="flex items-center gap-stack-md py-4 px-stack-lg text-primary border-l-[3px] border-primary bg-surface-container-low font-body-md text-body-md font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+                Công việc
+            </a>
+<a class="flex items-center gap-stack-md py-4 px-stack-lg text-secondary hover:text-primary transition-colors font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                Thanh toán
+            </a>
+</nav>
+<div class="mt-auto px-stack-lg border-t border-outline-variant pt-stack-lg space-y-4">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="support_agent">support_agent</span>
+                Hỗ trợ trực tuyến
+            </button>
+<div class="flex items-center gap-3 p-2">
+<img alt="User" class="w-10 h-10 rounded-full bg-surface-container-high" data-alt="A professional headshot of a logistics manager in a clean, modern studio setting. High-key lighting, soft shadows, and a neutral background reinforce a professional, minimalist aesthetic suitable for a high-end corporate CRM environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFQIQO4Bf3zyCiJov1qZ3KMCRJahYTkvkhT9CmoHbEB12wcqpNGVtQieclyb2nZYLY7oGuAfnWzaFT-fFuCZMIV0us7vskGgVzIH8wvTZ9dck127ResjBg7ATrDgrynqeYT9oFz6cK9Yz_sLF9V-ymAQ4hHHMbF8ZCLVVcp52kC7m4VZkZ7wsy9bkiiaFv4j92oGfPLe_3DTJ1RmuFMDYFWq7-7nqo6KX7ImA2dTJRTuYpgMZjiG_z7GoKLo1kt_YbEjK74HkcdbT0"/>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md font-bold truncate">Nguyễn Văn A</p>
+<p class="font-body-sm text-body-sm text-secondary truncate">Manager</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-[280px] h-20 z-40 bg-surface/70 backdrop-blur-[20px] border-b border-outline-variant flex justify-between items-center px-container-padding">
+<div class="flex items-center gap-stack-lg w-1/2">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none border-b border-outline-variant focus:border-primary focus:ring-0 pl-10 py-2 font-body-md text-body-md transition-all" placeholder="Tìm kiếm công việc..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-stack-lg">
+<button class="p-2 text-secondary hover:bg-primary-container/10 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-secondary hover:bg-primary-container/10 rounded-lg transition-all">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-label-md text-label-md font-bold shadow-sm hover:opacity-90 transition-all">
+                Tạo mới
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-20 min-h-screen p-container-padding">
+<div class="max-w-6xl mx-auto mt-8">
+<!-- Filters & Header -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Danh sách công việc</h2>
+<p class="font-body-md text-body-md text-secondary mt-1">Quản lý và theo dõi tiến độ vận hành hàng ngày.</p>
+</div>
+<div class="flex items-center gap-gutter">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-secondary opacity-60">Thời gian</span>
+<div class="flex items-center gap-2 border-b border-outline-variant pb-1 cursor-pointer">
+<span class="font-body-md text-body-md">Tất cả thời gian</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-secondary opacity-60">Trạng thái</span>
+<div class="flex items-center gap-2 border-b border-outline-variant pb-1 cursor-pointer">
+<span class="font-body-md text-body-md text-primary font-medium">Đang chờ xử lý</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Task List Checklist Layout -->
+<div class="space-y-stack-lg">
+<!-- Task Item: Overdue -->
+<div class="glass-panel group flex items-center gap-stack-lg p-stack-lg rounded-[24px] border border-outline-variant hover:shadow-[0px_10px_30px_rgba(43,45,66,0.05)] transition-all">
+<input class="custom-checkbox" type="checkbox"/>
+<div class="flex-1 grid grid-cols-12 items-center gap-gutter">
+<div class="col-span-5">
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Kiểm tra chứng từ lô hàng linh kiện điện tử</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Công ty TNHH TechVina</p>
+</div>
+<div class="col-span-3 flex justify-center">
+<span class="px-4 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md">Cao</span>
+</div>
+<div class="col-span-3 text-right">
+<p class="font-body-md text-body-md text-[#D90429] font-medium flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+                                Hết hạn: 10:00, 24/05
+                            </p>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Task Item: Pending -->
+<div class="glass-panel group flex items-center gap-stack-lg p-stack-lg rounded-[24px] border border-outline-variant hover:shadow-[0px_10px_30px_rgba(43,45,66,0.05)] transition-all">
+<input class="custom-checkbox" type="checkbox"/>
+<div class="flex-1 grid grid-cols-12 items-center gap-gutter">
+<div class="col-span-5">
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Báo giá lô hàng 5 container đi Cát Lái</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Công ty XNK Nam Việt</p>
+</div>
+<div class="col-span-3 flex justify-center">
+<span class="px-4 py-1 rounded-full bg-secondary/10 text-secondary font-label-md text-label-md">Trung bình</span>
+</div>
+<div class="col-span-3 text-right">
+<p class="font-body-md text-body-md text-secondary">
+                                Hạn: 17:00, Hôm nay
+                            </p>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Task Item: Pending -->
+<div class="glass-panel group flex items-center gap-stack-lg p-stack-lg rounded-[24px] border border-outline-variant hover:shadow-[0px_10px_30px_rgba(43,45,66,0.05)] transition-all">
+<input class="custom-checkbox" type="checkbox"/>
+<div class="flex-1 grid grid-cols-12 items-center gap-gutter">
+<div class="col-span-5">
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Điều phối xe tải lấy hàng tại kho ngoại quan</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Logistics Global JSC</p>
+</div>
+<div class="col-span-3 flex justify-center">
+<span class="px-4 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md">Cao</span>
+</div>
+<div class="col-span-3 text-right">
+<p class="font-body-md text-body-md text-secondary">
+                                Hạn: 08:30, 26/05
+                            </p>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Task Item: Completed -->
+<div class="glass-panel group flex items-center gap-stack-lg p-stack-lg rounded-[24px] border border-outline-variant opacity-60 transition-all">
+<input checked="" class="custom-checkbox" type="checkbox"/>
+<div class="flex-1 grid grid-cols-12 items-center gap-gutter">
+<div class="col-span-5">
+<h4 class="font-body-md text-body-md font-medium text-on-surface line-through decoration-primary/30">Cập nhật lịch trình tàu biển Vũng Tàu - Hải Phòng</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Vận tải Biển Đông</p>
+</div>
+<div class="col-span-3 flex justify-center">
+<span class="px-4 py-1 rounded-full bg-secondary/5 text-secondary font-label-md text-label-md">Thấp</span>
+</div>
+<div class="col-span-3 text-right">
+<p class="font-body-md text-body-md text-secondary">
+                                Đã hoàn thành
+                            </p>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Task Item: Pending -->
+<div class="glass-panel group flex items-center gap-stack-lg p-stack-lg rounded-[24px] border border-outline-variant hover:shadow-[0px_10px_30px_rgba(43,45,66,0.05)] transition-all">
+<input class="custom-checkbox" type="checkbox"/>
+<div class="flex-1 grid grid-cols-12 items-center gap-gutter">
+<div class="col-span-5">
+<h4 class="font-body-md text-body-md font-medium text-on-surface">Gửi thông báo phí lưu kho bãi (DEM/DET)</h4>
+<p class="font-body-sm text-body-sm text-secondary mt-0.5">Công ty May Mặc Việt Thắng</p>
+</div>
+<div class="col-span-3 flex justify-center">
+<span class="px-4 py-1 rounded-full bg-secondary/10 text-secondary font-label-md text-label-md">Trung bình</span>
+</div>
+<div class="col-span-3 text-right">
+<p class="font-body-md text-body-md text-secondary">
+                                Hạn: 15:00, 27/05
+                            </p>
+</div>
+<div class="col-span-1 flex justify-end">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-secondary" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Contextual Image (Bento-style decorative element) -->
+<div class="mt-20 grid grid-cols-3 gap-gutter opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+<div class="h-48 rounded-[24px] overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist high-angle photo of an organized desk with a single modern tablet showing complex logistics graphs. The room is filled with soft natural light, highlighting pristine white surfaces and subtle glass textures. The atmosphere is professional, focused, and calm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3Hv_2lWlOe6Mx3M97_lqenJZSqHExqDgGzmx5_nUv1C6RjWaTW4lS5R8xoaMxqP0egOtVODkyCehsoso7f6YPRsJECKCgH2lQ3wHcCCKjFBWUjpPSOa5R4H8XcXKI3CWv7AqamnMwJ4Lm7S1NB9g24_xyXoEYqfqG8NUvQFwh8KVK6lmP0b6DKO1_2IyiLaIjjuZeOYAYEyekUJn8-FdQismmFef0_rImlyeTqnRH3bCARjOipCwc2ibZ4xZc8wByAK7M-XTvpV54"/>
+</div>
+<div class="h-48 rounded-[24px] overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Macro photography of a high-tech digital clock display showing precision timing. The aesthetic is ultra-modern with cool blue and stark white tones. The shallow depth of field creates a sophisticated, professional vibe aligned with advanced logistics operations." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtjV3n0TLafqBEtGedrnvnjsFidi18ppfulxQXILFaDxmO2zEPgI8SU1rl9TsUmXTBOQXOH_DUnrM9XYpuRwkwfGkIR2eK6WpV53MKg51r_wcA8lUP-RHoZcIsMI5GRr6ikxCqXlzSo2C289C7Tfjon5gZnCSUk466E9EO0P2TKGgKjGS_-zEt98sSADNs9LAwHMaGkF517RXzpvXkdSF6ihFxoq6rBOEI143cjKAUZWI3rdBOqf_Tfu-DCOB6Sq6mbfwcwbp6G1lj"/>
+</div>
+<div class="h-48 rounded-[24px] overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="An abstract digital representation of a global shipping network with thin, glowing lines connecting major cities on a dark, minimalist world map. The lighting is low-key with vibrant red accents, emphasizing a sense of global connectivity and technological authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEC2eQHkYqUTatUCPIK1lHis3SeIHldvuANzKKEKaaprLVFiJojuI2EhstS-W_sGbPxPDrI2yzkHaJbmy778eYqM7O4hF6Jvus0nDfkOoBaNGENDJhVSbunX-ZtsBV2Bu8kN02jkYO3kwX4rXqI-bIW86YRZxiuwwiME6LwTy8JKqYO_7jGuCZbCt2-Flq8ddSb0a5wbZWGMlsy12e5V3qgJdd69Ep2cSKTS_SQjDdpkxMq_9ai7md1ePxtnoJhsZVSs_snMUh4hnY"/>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for Task Addition -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_task">add_task</span>
+</button>
+</body></html>

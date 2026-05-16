@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Báo Đen Logistics CRM</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#D90429", // Red Crimson
+                        "primary-container": "#D90429",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#ffffff",
+                        surface: "#F8F9FA",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#2B2D42",
+                        secondary: "#8D99AE",
+                        "outline-variant": "#EDF2F4"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-md": ["14px", {"lineHeight": "22.4px", "fontWeight": "300"}],
+                        "body-sm": ["12px", {"lineHeight": "19.2px", "fontWeight": "300"}],
+                        "label-md": ["13px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8F9FA; overflow-x: hidden; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .nav-item { cursor: pointer; }
+        .nav-item.active {
+            color: #D90429;
+            background-color: #f3f4f5;
+            border-left: 3px solid #D90429;
+        }
+        
+        /* Checkbox */
+        .custom-checkbox {
+            appearance: none; width: 20px; height: 20px;
+            border: 1px solid #EDF2F4; border-radius: 6px;
+            cursor: pointer; position: relative; transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked { background-color: #D90429; border-color: #D90429; }
+        .custom-checkbox:checked::after {
+            content: 'check'; font-family: 'Material Symbols Outlined';
+            position: absolute; color: white; font-size: 14px;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        
+        /* Scrollbar */
+        .kanban-container::-webkit-scrollbar { height: 8px; }
+        .kanban-container::-webkit-scrollbar-track { background: transparent; }
+        .kanban-container::-webkit-scrollbar-thumb { background: #e1e3e4; border-radius: 10px; }
+        
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Scrollbar for Drawer */
+        .drawer-content::-webkit-scrollbar { width: 6px; }
+        .drawer-content::-webkit-scrollbar-track { background: transparent; }
+        .drawer-content::-webkit-scrollbar-thumb { background: #d9dadb; border-radius: 10px; }
+
+        /* Custom Dropdown Animation */
+        .dropdown-menu { display: none; opacity: 0; transform: translateY(-10px); transition: all 0.2s; }
+        .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body class="text-on-surface antialiased">
+
+<!-- 0. LOGIN SCREEN (Full Overlay) -->
+<div id="view-login" class="fixed inset-0 z-[100] flex items-center justify-center bg-surface transition-all duration-500">
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[100px]"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-md glass-panel p-10 rounded-[32px] border border-white shadow-2xl">
+        <div class="text-center mb-10">
+            <h1 class="font-headline-lg font-bold text-primary mb-2">Báo Đen Logistics</h1>
+            <p class="text-secondary font-body-md">Đăng nhập vào hệ thống CRM</p>
+        </div>
+        <form onsubmit="event.preventDefault(); login();" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-on-surface mb-2">Email</label>
+                <input type="email" value="admin@baoden.vn" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-on-surface mb-2">Mật khẩu</label>
+                <input type="password" value="********" class="w-full bg-white border border-outline-variant rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all">
+            </div>
+            <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked class="custom-checkbox w-4 h-4 rounded">
+                    <span class="text-sm text-secondary">Ghi nhớ tôi</span>
+                </label>
+                <a href="#" class="text-sm text-primary hover:underline">Quên mật khẩu?</a>
+            </div>
+            <button type="submit" class="w-full bg-primary text-white py-3.5 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+                Đăng nhập <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </button>
+            <div class="text-center mt-6">
+                <button type="button" class="w-full flex items-center justify-center gap-3 py-3 border border-outline-variant bg-white rounded-xl text-on-surface hover:bg-surface-container transition-all">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" class="w-5 h-5" alt="Google">
+                    Đăng nhập bằng Google
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="w-[280px] h-screen fixed left-0 top-0 border-r border-outline-variant bg-surface-container-lowest flex flex-col py-6 z-50 shadow-[0px_10px_30px_rgba(43,45,66,0.05)]">
+    <div class="px-6 mb-10">
+        <h1 class="font-headline-md text-[24px] font-bold text-primary">Báo Đen Logistics</h1>
+        <p class="font-body-sm text-secondary uppercase tracking-widest mt-1 text-[10px]">CRM System</p>
+    </div>
+    
+    <nav class="flex-1 space-y-1" id="sidebar-nav">
+        <div class="nav-item active flex items-center gap-4 py-4 px-6 text-secondary hover:bg-surface-container transition-colors" data-target="view-dashboard">
+            <span class="material-symbols-outlined nav-icon fill-icon">dashboard</span>
+            <span class="font-label-md">Tổng quan</span>
+        </div>
+        <div class="nav-item flex items-center gap-4 py-4 px-6 text-secondary hover:bg-surface-container transition-colors border-l-[3px] border-transparent" data-target="view-customers">
+            <span class="material-symbols-outlined nav-icon">group</span>
+            <span class="font-label-md">Khách hàng</span>
+        </div>
+        <div class="nav-item flex items-center gap-4 py-4 px-6 text-secondary hover:bg-surface-container transition-colors border-l-[3px] border-transparent" data-target="view-pipeline">
+            <span class="material-symbols-outlined nav-icon">handshake</span>
+            <span class="font-label-md">Cơ hội (Kanban)</span>
+        </div>
+        <div class="nav-item flex items-center gap-4 py-4 px-6 text-secondary hover:bg-surface-container transition-colors border-l-[3px] border-transparent" data-target="view-tasks">
+            <span class="material-symbols-outlined nav-icon">assignment</span>
+            <span class="font-label-md">Công việc</span>
+        </div>
+        <div class="nav-item flex items-center gap-4 py-4 px-6 text-secondary hover:bg-surface-container transition-colors border-l-[3px] border-transparent" data-target="view-payments">
+            <span class="material-symbols-outlined nav-icon">payments</span>
+            <span class="font-label-md">Thanh toán</span>
+        </div>
+    </nav>
+    
+    <div class="px-6 mt-auto border-t border-outline-variant pt-6 space-y-4">
+        <button onclick="toggleWidget('chat-widget')" class="w-full py-3 px-4 bg-primary text-white rounded-xl font-label-md flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+            <span class="material-symbols-outlined text-[18px]">support_agent</span> Hỗ trợ trực tuyến
+        </button>
+        <div class="flex items-center gap-3 p-2 relative">
+            <div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold">AV</div>
+            <div class="overflow-hidden flex-1">
+                <p class="font-label-md font-bold truncate">Đỗ Anh Vũ</p>
+                <p class="font-body-sm text-secondary truncate">Admin</p>
+            </div>
+            <button onclick="toggleDropdown('profile-dropdown')" class="text-secondary hover:text-primary"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+            
+            <!-- Profile Dropdown -->
+            <div id="profile-dropdown" class="dropdown-menu absolute bottom-full mb-2 left-0 w-[230px] bg-white border border-outline-variant shadow-xl rounded-xl py-2 z-50">
+                <div class="px-4 py-2 border-b border-outline-variant mb-2">
+                    <p class="font-bold text-sm">Đỗ Anh Vũ</p>
+                    <p class="text-xs text-secondary">admin@baoden.vn</p>
+                </div>
+                <button onclick="openModal('modal-settings')" class="w-full text-left px-4 py-2 text-sm hover:bg-surface flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">settings</span> Cài đặt</button>
+                <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-primary hover:bg-primary/5 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">logout</span> Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- TOP HEADER -->
+<header class="fixed top-0 right-0 left-[280px] h-20 z-40 glass-panel border-b border-outline-variant flex justify-between items-center px-8">
+    <div class="flex items-center gap-6 flex-1 max-w-2xl">
+        <div class="relative w-full group">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-secondary group-focus-within:text-primary">search</span>
+            <input type="text" placeholder="Tìm kiếm nhanh dữ liệu..." class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 pl-10 py-2 font-body-md transition-all placeholder:text-secondary/50">
+        </div>
+    </div>
+    <div class="flex items-center gap-6 relative">
+        <button onclick="toggleDropdown('noti-dropdown')" class="p-2 text-secondary hover:bg-surface-container rounded-lg transition-all relative">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+        </button>
+        <!-- Notification Dropdown -->
+        <div id="noti-dropdown" class="dropdown-menu absolute top-full mt-4 right-32 w-[320px] bg-white border border-outline-variant shadow-xl rounded-xl overflow-hidden z-50">
+            <div class="bg-surface-container-low px-4 py-3 border-b border-outline-variant flex justify-between items-center">
+                <h4 class="font-bold text-sm">Thông báo</h4>
+                <span class="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">3 Mới</span>
+            </div>
+            <div class="divide-y divide-outline-variant max-h-[300px] overflow-y-auto">
+                <div class="p-4 hover:bg-surface transition-colors cursor-pointer opacity-100 bg-primary/5">
+                    <p class="text-sm font-medium mb-1">Khách hàng mới được phân công</p>
+                    <p class="text-xs text-secondary mb-1">Lê Văn Hòa đã được Admin phân cho bạn.</p>
+                    <p class="text-[10px] text-secondary opacity-60">10 phút trước</p>
+                </div>
+                <div class="p-4 hover:bg-surface transition-colors cursor-pointer">
+                    <p class="text-sm font-medium mb-1">Cơ hội Đã chốt đơn</p>
+                    <p class="text-xs text-secondary mb-1">Trần Hoàng Nam vừa thanh toán hợp đồng 120tr.</p>
+                    <p class="text-[10px] text-secondary opacity-60">2 giờ trước</p>
+                </div>
+                <div class="p-4 hover:bg-surface transition-colors cursor-pointer">
+                    <p class="text-sm font-medium mb-1">Nhắc nhở công việc</p>
+                    <p class="text-xs text-secondary mb-1">Bạn có 1 báo giá yến sào cần gửi trước 17:00.</p>
+                    <p class="text-[10px] text-secondary opacity-60">Hôm qua</p>
+                </div>
+            </div>
+            <div class="px-4 py-2 border-t border-outline-variant text-center">
+                <button class="text-sm text-primary hover:underline">Xem tất cả</button>
+            </div>
+        </div>
+
+        <button onclick="openModal('modal-settings')" class="p-2 text-secondary hover:bg-surface-container rounded-lg transition-all">
+            <span class="material-symbols-outlined">settings</span>
+        </button>
+        <button onclick="openModal('modal-create')" class="bg-primary text-white px-6 py-2.5 rounded-[12px] font-label-md shadow-sm hover:opacity-90 active:scale-95 transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">add</span> Tạo mới
+        </button>
+    </div>
+</header>
+
+<!-- MAIN WRAPPER -->
+<main class="ml-[280px] pt-20 min-h-screen">
+    
+    <!-- 1. DASHBOARD -->
+    <section id="view-dashboard" class="view-section active p-8">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="font-headline-lg text-[28px] font-light mb-1">Tổng quan Dashboard</h2>
+                <p class="font-body-md text-secondary">Chào mừng trở lại! Tóm tắt tình hình kinh doanh hôm nay.</p>
+            </div>
+            <div class="glass-panel px-4 py-2 rounded-xl border border-outline-variant flex items-center gap-3">
+                <span class="material-symbols-outlined text-secondary">calendar_today</span>
+                <span class="font-label-md text-secondary">Hôm nay</span>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-[24px] p-6 border border-outline-variant shadow-sm hover:shadow-md transition-all border-l-4 border-l-primary cursor-pointer" onclick="document.querySelector('[data-target=\'view-customers\']').click()">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary"><span class="material-symbols-outlined">person_add</span></div>
+                    <span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+12%</span>
+                </div>
+                <p class="font-body-sm text-secondary mb-1">Khách hàng mới</p>
+                <h3 class="text-3xl font-bold">128</h3>
+            </div>
+            <div class="bg-white rounded-[24px] p-6 border border-outline-variant shadow-sm hover:shadow-md transition-all cursor-pointer" onclick="document.querySelector('[data-target=\'view-pipeline\']').click()">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">handshake</span></div>
+                    <span class="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-full">+5.2%</span>
+                </div>
+                <p class="font-body-sm text-secondary mb-1">Cơ hội đã chốt</p>
+                <h3 class="text-3xl font-bold">45</h3>
+            </div>
+            <div class="bg-white rounded-[24px] p-6 border border-outline-variant shadow-sm hover:shadow-md transition-all">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">trending_up</span></div>
+                    <span class="text-xs font-bold text-red-500 bg-red-50 px-2 py-1 rounded-full">-1.5%</span>
+                </div>
+                <p class="font-body-sm text-secondary mb-1">Tỷ lệ chuyển đổi</p>
+                <h3 class="text-3xl font-bold">24.8%</h3>
+            </div>
+            <div class="bg-white rounded-[24px] p-6 border border-outline-variant shadow-sm hover:shadow-md transition-all cursor-pointer" onclick="document.querySelector('[data-target=\'view-tasks\']').click()">
+                <div class="flex justify-between items-start mb-6">
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary"><span class="material-symbols-outlined">notification_important</span></div>
+                </div>
+                <p class="font-body-sm text-secondary mb-1">Nhắc việc cần xử lý</p>
+                <h3 class="text-3xl font-bold text-primary">05</h3>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white rounded-[24px] p-8 border border-outline-variant shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="font-headline-md font-semibold">Tỷ lệ dịch vụ quan tâm</h4>
+                    <button class="text-sm text-secondary border border-outline-variant rounded-lg px-3 py-1 hover:bg-surface">7 ngày qua <span class="material-symbols-outlined text-[14px] align-middle">expand_more</span></button>
+                </div>
+                <div class="h-[250px] bg-surface-container-low rounded-xl flex items-center justify-center text-secondary border border-dashed border-outline-variant relative overflow-hidden">
+                    <!-- Fake chart lines -->
+                    <svg class="absolute inset-0 w-full h-full opacity-30" preserveAspectRatio="none" viewBox="0 0 100 100"><path d="M0,80 Q25,50 50,60 T100,20" stroke="#D90429" fill="none" stroke-width="2"/><path d="M0,60 Q25,70 50,40 T100,50" stroke="#8D99AE" fill="none" stroke-width="2"/></svg>
+                    <span class="material-symbols-outlined text-[48px] opacity-50 z-10">bar_chart</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-[24px] p-8 border border-outline-variant shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="font-headline-md font-semibold">Công việc khẩn</h4>
+                    <button class="text-xs text-primary font-bold hover:underline" onclick="document.querySelector('[data-target=\'view-tasks\']').click()">Xem tất cả</button>
+                </div>
+                <div class="space-y-4">
+                    <label class="flex items-center cursor-pointer p-3 rounded-xl hover:bg-surface transition-all border border-transparent hover:border-outline-variant">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                        <div class="ml-4"><p class="text-sm font-medium line-through opacity-50">Báo giá Yến Sào Vĩnh Hưng</p></div>
+                    </label>
+                    <label class="flex items-center cursor-pointer p-3 rounded-xl hover:bg-surface transition-all border border-transparent hover:border-outline-variant">
+                        <input type="checkbox" class="custom-checkbox">
+                        <div class="ml-4"><p class="text-sm font-medium text-primary">Tư vấn HQ cho đại lý Minh Tú</p><p class="text-[10px] text-secondary">Hạn: 15:00</p></div>
+                    </label>
+                    <label class="flex items-center cursor-pointer p-3 rounded-xl hover:bg-surface transition-all border border-transparent hover:border-outline-variant">
+                        <input type="checkbox" class="custom-checkbox">
+                        <div class="ml-4"><p class="text-sm font-medium">Gọi lại anh Hoàng Nam</p></div>
+                    </label>
+                </div>
+                <button onclick="openModal('modal-create')" class="w-full mt-6 py-3 border-2 border-dashed border-outline-variant rounded-xl text-secondary hover:border-primary hover:text-primary transition-all flex justify-center items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">add</span> Thêm công việc
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. KHÁCH HÀNG -->
+    <section id="view-customers" class="view-section p-8">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="font-headline-lg text-[28px] font-light mb-1">Khách hàng</h2>
+                <p class="font-body-md text-secondary">Danh sách đối tác và khách hàng tiềm năng</p>
+            </div>
+            <div class="flex gap-4">
+                <select class="bg-white border-outline-variant rounded-lg text-sm px-4 py-2 focus:ring-primary focus:border-primary">
+                    <option>Phân khúc: Tất cả</option>
+                    <option>Kim cương</option>
+                    <option>Vàng</option>
+                    <option>Bạc</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-[24px] border border-outline-variant shadow-sm overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-outline-variant bg-surface-container-low/50">
+                        <th class="px-6 py-4 text-[11px] font-bold text-secondary uppercase tracking-widest">Tên khách hàng</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-secondary uppercase tracking-widest">Công ty</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-secondary uppercase tracking-widest text-center">Phân khúc</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-secondary uppercase tracking-widest">Dịch vụ quan tâm</th>
+                        <th class="px-6 py-4 text-[11px] font-bold text-secondary uppercase tracking-widest text-right">Giá trị (VND)</th>
+                        <th class="px-6 py-4"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant" id="customer-table-body">
+                    <!-- Dữ liệu được render qua JS -->
+                </tbody>
+            </table>
+            <div class="p-4 border-t border-outline-variant bg-surface text-center">
+                <p class="text-xs text-secondary">Đang hiển thị 6/128 khách hàng</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. PIPELINE KANBAN -->
+    <section id="view-pipeline" class="view-section p-8 h-[calc(100vh-80px)] flex flex-col">
+        <div class="flex justify-between items-end mb-8">
+            <div>
+                <h2 class="font-headline-lg text-[28px] font-light mb-1">Pipeline Cơ Hội</h2>
+            </div>
+        </div>
+        
+        <div class="flex-1 overflow-x-auto kanban-container pb-4 flex gap-6">
+            <!-- Mới tiếp cận -->
+            <div class="w-[320px] flex-shrink-0 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-label-md font-bold uppercase tracking-wider">Mới tiếp cận</h3>
+                        <span class="bg-surface-container text-secondary px-2 py-0.5 rounded-full text-[11px]">1</span>
+                    </div>
+                </div>
+                <div class="flex-1 glass-panel rounded-[24px] p-4 border border-outline-variant space-y-4 min-h-[400px]">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors" onclick="openDrawer('drawer-details', 'Lê Văn Hòa', '45.000.000', 'Shop Thực phẩm Sạch', 'Mới tiếp cận')">
+                        <span class="bg-surface-container text-secondary text-[10px] px-2 py-1 rounded uppercase">Vận tải đường bộ</span>
+                        <h4 class="font-body-md font-semibold mt-2 mb-1">Lê Văn Hòa</h4>
+                        <p class="font-body-sm text-secondary mb-3">Shop Thực phẩm Sạch</p>
+                        <div class="pt-3 border-t border-outline-variant/50 flex justify-between">
+                            <span class="text-primary font-bold text-sm">45.000.000 đ</span>
+                        </div>
+                    </div>
+                    <button onclick="openModal('modal-create')" class="w-full py-2 border-2 border-dashed border-outline-variant rounded-xl text-secondary hover:text-primary hover:border-primary transition-all flex items-center justify-center gap-1 text-sm"><span class="material-symbols-outlined text-[16px]">add</span>Thêm thẻ</button>
+                </div>
+            </div>
+            
+            <!-- Đang tư vấn -->
+            <div class="w-[320px] flex-shrink-0 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-label-md font-bold uppercase tracking-wider">Đang tư vấn</h3>
+                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[11px]">2</span>
+                    </div>
+                </div>
+                <div class="flex-1 glass-panel rounded-[24px] p-4 border border-outline-variant space-y-4 min-h-[400px]">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors" onclick="openDrawer('drawer-details', 'Phạm Thanh Thủy', '85.000.000', 'Yến Sào Vĩnh Hưng', 'Đang tư vấn')">
+                        <span class="bg-primary/10 text-primary text-[10px] px-2 py-1 rounded uppercase">Order chính ngạch</span>
+                        <h4 class="font-body-md font-semibold mt-2 mb-1">Phạm Thanh Thủy</h4>
+                        <p class="font-body-sm text-secondary mb-3">Yến Sào Vĩnh Hưng</p>
+                        <div class="pt-3 border-t border-outline-variant/50 flex justify-between">
+                            <span class="text-primary font-bold text-sm">85.000.000 đ</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors" onclick="openDrawer('drawer-details', 'Đặng Thu Thảo', '25.000.000', 'Cá nhân', 'Đang tư vấn')">
+                        <span class="bg-surface-container text-secondary text-[10px] px-2 py-1 rounded uppercase">Order tiểu ngạch</span>
+                        <h4 class="font-body-md font-semibold mt-2 mb-1">Đặng Thu Thảo</h4>
+                        <p class="font-body-sm text-secondary mb-3">Cá nhân</p>
+                        <div class="pt-3 border-t border-outline-variant/50 flex justify-between">
+                            <span class="text-primary font-bold text-sm">25.000.000 đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gửi báo giá -->
+            <div class="w-[320px] flex-shrink-0 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-label-md font-bold uppercase tracking-wider">Gửi báo giá</h3>
+                        <span class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[11px]">1</span>
+                    </div>
+                </div>
+                <div class="flex-1 glass-panel rounded-[24px] p-4 border border-outline-variant space-y-4 min-h-[400px]">
+                     <div class="bg-white p-4 rounded-xl shadow-sm border border-outline-variant cursor-pointer hover:border-primary transition-colors" onclick="openDrawer('drawer-details', 'Nguyễn Thị Minh Tú', '500.000.000', 'Đại lý Quà tặng', 'Gửi báo giá')">
+                        <span class="bg-primary/10 text-primary text-[10px] px-2 py-1 rounded uppercase">Đường biển</span>
+                        <h4 class="font-body-md font-semibold mt-2 mb-1">Nguyễn Thị Minh Tú</h4>
+                        <p class="font-body-sm text-secondary mb-3">Đại lý Quà tặng</p>
+                        <div class="pt-3 border-t border-outline-variant/50 flex justify-between">
+                            <span class="text-primary font-bold text-sm">500.000.000 đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Đã chốt đơn -->
+            <div class="w-[320px] flex-shrink-0 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-label-md font-bold uppercase tracking-wider text-green-700">Đã chốt đơn</h3>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[11px]">1</span>
+                    </div>
+                </div>
+                <div class="flex-1 glass-panel rounded-[24px] p-4 border border-outline-variant space-y-4 min-h-[400px]">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-l-green-500 cursor-pointer" onclick="openDrawer('drawer-details', 'Trần Hoàng Nam', '120.000.000', 'Chuỗi nhà hàng', 'Đã chốt đơn')">
+                        <span class="bg-surface-container text-secondary text-[10px] px-2 py-1 rounded uppercase">Khai báo HQ</span>
+                        <h4 class="font-body-md font-semibold mt-2 mb-1">Trần Hoàng Nam</h4>
+                        <p class="font-body-sm text-secondary mb-3">Chuỗi nhà hàng</p>
+                        <div class="pt-3 border-t border-outline-variant/50 flex justify-between">
+                            <span class="text-green-600 font-bold text-sm">120.000.000 đ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thất bại -->
+            <div class="w-[320px] flex-shrink-0 flex flex-col">
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-label-md font-bold uppercase tracking-wider text-secondary">Thất bại</h3>
+                        <span class="bg-surface-container text-secondary px-2 py-0.5 rounded-full text-[11px]">0</span>
+                    </div>
+                </div>
+                <div class="flex-1 glass-panel rounded-[24px] p-4 border border-outline-variant flex items-center justify-center min-h-[400px] opacity-50">
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-[48px] text-secondary">inbox</span>
+                        <p class="text-sm mt-2 text-secondary">Chưa có dữ liệu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. TASKS -->
+    <section id="view-tasks" class="view-section p-8">
+        <div class="flex justify-between items-end mb-8">
+            <h2 class="font-headline-lg text-[28px] font-light">Danh sách công việc</h2>
+            <button onclick="openModal('modal-create')" class="bg-primary text-white px-4 py-2 rounded-xl text-sm flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[16px]">add</span> Công việc mới</button>
+        </div>
+        <div class="space-y-4" id="task-list-container">
+            <!-- Dữ liệu render bằng JS -->
+        </div>
+    </section>
+
+    <!-- 5. PAYMENTS -->
+    <section id="view-payments" class="view-section p-8">
+        <div class="flex justify-between items-end mb-8">
+            <h2 class="font-headline-lg text-[28px] font-light">Thanh toán & Đặt cọc</h2>
+        </div>
+        <div class="bg-white rounded-[24px] border border-outline-variant shadow-sm p-10 flex flex-col items-center justify-center text-center h-[400px]">
+            <span class="material-symbols-outlined text-[64px] text-secondary opacity-30 mb-4">receipt_long</span>
+            <h3 class="font-headline-md mb-2">Quản lý dòng tiền</h3>
+            <p class="text-secondary mb-6">Theo dõi các khoản thanh toán và đặt cọc của khách hàng tại đây.</p>
+            <button class="bg-primary text-white px-6 py-2.5 rounded-xl font-label-md shadow-md flex items-center gap-2" onclick="openModal('modal-payment')">
+                <span class="material-symbols-outlined text-[18px]">add_circle</span> Ghi nhận cọc mới
+            </button>
+        </div>
+    </section>
+
+</main>
+
+<!-- ================= OVERLAYS ================= -->
+<div id="overlay-backdrop" class="fixed inset-0 bg-on-surface/30 backdrop-blur-[2px] z-[60] opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeAllOverlays()"></div>
+
+<!-- MODAL: TẠO MỚI (GLOBAL CREATE) -->
+<div id="modal-create" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[24px] shadow-2xl z-[70] opacity-0 pointer-events-none scale-95 transition-all duration-300 overflow-hidden">
+    <div class="px-8 py-5 border-b border-outline-variant flex justify-between items-center bg-surface">
+        <h3 class="font-headline-md font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary">add_box</span> Tạo mới dữ liệu</h3>
+        <button onclick="closeAllOverlays()" class="text-secondary hover:text-primary p-1 rounded-md hover:bg-outline-variant transition-colors"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="p-8 space-y-5">
+        <div class="flex gap-2 border-b border-outline-variant pb-4">
+            <button class="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-bold border border-primary/20">Khách hàng</button>
+            <button class="px-4 py-1.5 text-secondary hover:bg-surface rounded-full text-sm font-medium">Cơ hội</button>
+            <button class="px-4 py-1.5 text-secondary hover:bg-surface rounded-full text-sm font-medium">Công việc</button>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Tên khách hàng/Công ty <span class="text-primary">*</span></label>
+            <input type="text" placeholder="Nhập tên..." class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Số điện thoại</label>
+                <input type="text" placeholder="090..." class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Phân khúc</label>
+                <select class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm">
+                    <option>Bạc (Tiêu chuẩn)</option>
+                    <option>Vàng</option>
+                    <option>Kim cương</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Dịch vụ quan tâm</label>
+            <select class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm">
+                <option>Vận tải đường biển</option>
+                <option>Vận tải đường bộ</option>
+                <option>Order chính ngạch</option>
+                <option>Khai báo hải quan</option>
+            </select>
+        </div>
+    </div>
+    <div class="px-8 py-5 bg-surface-container-low border-t border-outline-variant flex justify-end gap-3">
+        <button onclick="closeAllOverlays()" class="px-5 py-2 border border-outline-variant bg-white rounded-xl text-on-surface hover:bg-surface transition-all text-sm font-medium">Hủy bỏ</button>
+        <button onclick="alert('Đã lưu thành công!'); closeAllOverlays();" class="px-5 py-2 bg-primary text-white rounded-xl shadow-md hover:opacity-90 transition-all text-sm font-bold flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">save</span> Lưu dữ liệu</button>
+    </div>
+</div>
+
+<!-- MODAL: GHI NHẬN THANH TOÁN -->
+<div id="modal-payment" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white rounded-[24px] shadow-2xl z-[70] opacity-0 pointer-events-none scale-95 transition-all duration-300 overflow-hidden">
+    <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface">
+        <h3 class="font-headline-md font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary">payments</span> Ghi nhận cọc</h3>
+        <button onclick="closeAllOverlays()" class="text-secondary hover:text-primary"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="p-6 space-y-4">
+        <div>
+            <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Khách hàng</label>
+            <select class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm">
+                <option>Chọn khách hàng...</option>
+                <option>Lê Văn Hòa</option>
+                <option>Nguyễn Thị Minh Tú</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Số tiền (VND)</label>
+            <input type="text" placeholder="Ví dụ: 10,000,000" class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm font-bold text-primary">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-secondary uppercase tracking-wide mb-1">Ghi chú</label>
+            <textarea rows="2" class="w-full border-outline-variant rounded-xl px-4 py-2 focus:ring-primary focus:border-primary text-sm"></textarea>
+        </div>
+    </div>
+    <div class="px-6 py-4 bg-surface-container flex justify-end gap-3">
+        <button onclick="closeAllOverlays()" class="px-4 py-2 border border-outline-variant bg-white rounded-xl text-sm font-medium">Hủy</button>
+        <button onclick="alert('Ghi nhận cọc thành công!'); closeAllOverlays();" class="px-4 py-2 bg-primary text-white rounded-xl shadow-md text-sm font-bold">Xác nhận</button>
+    </div>
+</div>
+
+<!-- MODAL: CÀI ĐẶT -->
+<div id="modal-settings" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[24px] shadow-2xl z-[70] opacity-0 pointer-events-none scale-95 transition-all duration-300 overflow-hidden">
+    <div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface">
+        <h3 class="font-headline-md font-bold text-on-surface">Cài đặt hệ thống</h3>
+        <button onclick="closeAllOverlays()" class="text-secondary hover:text-primary"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="p-6">
+        <p class="text-secondary text-sm mb-4">Các thiết lập về tài khoản và giao diện sẽ được cập nhật trong phiên bản tiếp theo.</p>
+        <div class="flex items-center justify-between p-4 bg-surface rounded-xl border border-outline-variant">
+            <span class="font-medium text-sm">Chế độ tối (Dark Mode)</span>
+            <div class="w-10 h-5 bg-outline-variant rounded-full relative cursor-not-allowed opacity-50">
+                <div class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DRAWER: CHI TIẾT KANBAN/KHÁCH HÀNG -->
+<div id="drawer-details" class="fixed top-0 right-0 h-screen w-full max-w-md bg-white shadow-2xl z-[70] translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Header -->
+    <div class="px-6 py-5 border-b border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+        <h3 class="font-headline-md font-bold text-on-surface truncate pr-4" id="drawer-title">Chi tiết</h3>
+        <button onclick="closeAllOverlays()" class="text-secondary hover:text-primary p-2 bg-surface-container-low rounded-full transition-colors"><span class="material-symbols-outlined text-[18px]">close</span></button>
+    </div>
+    <!-- Content Scrollable -->
+    <div class="p-6 flex-1 drawer-content overflow-y-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg"><span class="material-symbols-outlined">person</span></div>
+            <div>
+                <p class="font-bold text-lg text-on-surface" id="drawer-company">Tên công ty</p>
+                <p class="text-sm text-secondary bg-surface-container inline-block px-2 py-0.5 rounded" id="drawer-stage">Trạng thái</p>
+            </div>
+        </div>
+        
+        <div class="bg-surface p-4 rounded-xl border border-outline-variant mb-6 flex justify-between items-center">
+            <span class="text-sm text-secondary">Giá trị dự kiến:</span>
+            <span class="text-xl font-bold text-primary" id="drawer-value">0 đ</span>
+        </div>
+
+        <h4 class="font-bold text-sm uppercase tracking-wider text-secondary border-b border-outline-variant pb-2 mb-4">Lịch sử tương tác</h4>
+        <div class="space-y-4 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-outline-variant before:via-outline-variant before:to-transparent">
+            <!-- Timeline Item -->
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div class="flex items-center justify-center w-6 h-6 rounded-full border border-white bg-primary text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <span class="material-symbols-outlined text-[12px]">done</span>
+                </div>
+                <div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-xl shadow-sm bg-white border border-outline-variant">
+                    <div class="flex items-center justify-between mb-1">
+                        <div class="font-bold text-sm text-on-surface">Cập nhật trạng thái</div>
+                        <div class="text-[10px] text-secondary">Hôm nay</div>
+                    </div>
+                    <div class="text-xs text-secondary">Chuyển sang bước tư vấn.</div>
+                </div>
+            </div>
+            <!-- Timeline Item -->
+            <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div class="flex items-center justify-center w-6 h-6 rounded-full border border-white bg-surface-container text-secondary shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                    <span class="material-symbols-outlined text-[12px]">call</span>
+                </div>
+                <div class="w-[calc(100%-2.5rem)] md:w-[calc(50%-1.5rem)] p-3 rounded-xl shadow-sm bg-white border border-outline-variant">
+                    <div class="flex items-center justify-between mb-1">
+                        <div class="font-bold text-sm text-on-surface">Gọi điện thoại</div>
+                        <div class="text-[10px] text-secondary">Hôm qua</div>
+                    </div>
+                    <div class="text-xs text-secondary">Khách cần tư vấn gửi hàng.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Actions -->
+    <div class="p-6 border-t border-outline-variant bg-surface-container-lowest flex gap-3">
+        <button onclick="alert('Đã chuyển trạng thái: Đã chốt đơn'); closeAllOverlays();" class="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold shadow-md hover:opacity-90 transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[18px]">verified</span> Chốt đơn</button>
+        <button class="flex-1 border border-outline-variant bg-white text-secondary py-3 rounded-xl font-bold hover:bg-surface transition-all flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[18px]">call</span> Liên hệ</button>
+    </div>
+</div>
+
+<!-- WIDGET: CHAT HỖ TRỢ -->
+<div id="chat-widget" class="fixed bottom-6 right-6 w-80 bg-white rounded-2xl shadow-2xl z-50 border border-outline-variant flex flex-col overflow-hidden transition-all duration-300 translate-y-4 opacity-0 pointer-events-none" style="height: 400px;">
+    <div class="bg-primary p-4 text-white flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">support_agent</span>
+            <span class="font-bold text-sm">Hỗ trợ kỹ thuật</span>
+        </div>
+        <button onclick="toggleWidget('chat-widget')" class="hover:bg-white/20 p-1 rounded"><span class="material-symbols-outlined text-[18px]">close</span></button>
+    </div>
+    <div class="flex-1 bg-surface-container-low p-4 overflow-y-auto space-y-3">
+        <div class="flex gap-2">
+            <div class="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">BD</div>
+            <div class="bg-white p-2.5 rounded-r-xl rounded-bl-xl shadow-sm text-sm border border-outline-variant">
+                Xin chào! Tôi có thể giúp gì cho bạn trong việc sử dụng CRM?
+            </div>
+        </div>
+    </div>
+    <div class="p-3 border-t border-outline-variant bg-white flex gap-2">
+        <input type="text" placeholder="Nhập tin nhắn..." class="flex-1 border-outline-variant rounded-lg px-3 py-1.5 text-sm focus:border-primary focus:ring-primary">
+        <button class="bg-primary text-white p-1.5 rounded-lg"><span class="material-symbols-outlined text-[18px]">send</span></button>
+    </div>
+</div>
+
+
+<script>
+    // --- DATA MẪU (Từ Design Brief: Yến Sào Vĩnh Hưng) ---
+    const customers = [
+        { name: "Nguyễn Thị Minh Tú", company: "Đại lý Quà tặng Cao cấp", segment: "Kim cương", service: "Vận chuyển đường biển", value: "500.000.000" },
+        { name: "Trần Hoàng Nam", company: "Chuỗi nhà hàng Hải sản", segment: "Vàng", service: "Khai báo hải quan", value: "120.000.000" },
+        { name: "Phạm Thanh Thủy", company: "Yến Sào Vĩnh Hưng (Nội bộ)", segment: "Vàng", service: "Order chính ngạch", value: "85.000.000" },
+        { name: "Lê Văn Hòa", company: "Shop Thực phẩm Sạch", segment: "Bạc", service: "Vận chuyển đường bộ", value: "45.000.000" },
+        { name: "Đặng Thu Thảo", company: "Cá nhân (Kinh doanh online)", segment: "Bạc", service: "Order tiểu ngạch", value: "25.000.000" },
+        { name: "Ngô Quốc Bảo", company: "Xuất nhập khẩu Gia đình", segment: "Kim cương", service: "Vận chuyển hàng không", value: "210.000.000" },
+    ];
+
+    const tasks = [
+        { title: "Gửi báo giá vận chuyển 200kg tổ yến thô", client: "Minh Tú", priority: "Cao", date: "15/05/2026", done: false },
+        { title: "Kiểm tra hồ sơ khai báo HQ lô hàng yến tinh chế", client: "Hoàng Nam", priority: "Trung bình", date: "16/05/2026", done: false },
+        { title: "Gọi điện tư vấn nhập khẩu chính ngạch", client: "Phạm Thanh Thủy", priority: "Cao", date: "14/05/2026", done: true },
+        { title: "Gửi mẫu hợp đồng vận chuyển đường bộ", client: "Lê Văn Hòa", priority: "Thấp", date: "18/05/2026", done: false },
+        { title: "Cập nhật trạng thái nạp tiền ký quỹ", client: "Đặng Thu Thảo", priority: "Trung bình", date: "15/05/2026", done: false },
+    ];
+
+    // --- RENDER DỮ LIỆU ---
+    function renderCustomers() {
+        const tbody = document.getElementById('customer-table-body');
+        let html = '';
+        customers.forEach(c => {
+            let badgeClass = c.segment === 'Kim cương' ? 'bg-primary/10 text-primary border border-primary/20' : (c.segment === 'Vàng' ? 'bg-yellow-50 text-yellow-700 border border-yellow-200' : 'bg-surface-container text-secondary border border-outline-variant');
+            html += `
+                <tr class="hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="openDrawer('drawer-details', '${c.name}', '${c.value}', '${c.company}', 'Đang tư vấn')">
+                    <td class="px-6 py-4 font-medium">${c.name}</td>
+                    <td class="px-6 py-4 text-secondary text-sm">${c.company}</td>
+                    <td class="px-6 py-4 text-center"><span class="px-3 py-1 rounded-full text-[11px] font-bold ${badgeClass}">${c.segment}</span></td>
+                    <td class="px-6 py-4 text-secondary text-sm">${c.service}</td>
+                    <td class="px-6 py-4 text-right font-semibold text-primary">${c.value} đ</td>
+                    <td class="px-6 py-4 text-right"><span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span></td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    }
+
+    function renderTasks() {
+        const container = document.getElementById('task-list-container');
+        let html = '';
+        tasks.forEach((t, index) => {
+            let pColor = t.priority === 'Cao' ? 'text-primary bg-primary/10' : (t.priority === 'Trung bình' ? 'text-yellow-700 bg-yellow-50' : 'text-secondary bg-surface-container');
+            let textClass = t.done ? 'line-through opacity-50' : '';
+            let checkedAttr = t.done ? 'checked' : '';
+            html += `
+                <div class="glass-panel flex items-center gap-6 p-5 rounded-2xl border border-outline-variant hover:shadow-md transition-all bg-white group cursor-pointer" id="task-${index}">
+                    <input type="checkbox" class="custom-checkbox" ${checkedAttr} onchange="document.getElementById('task-${index}').querySelector('h4').classList.toggle('line-through'); document.getElementById('task-${index}').querySelector('h4').classList.toggle('opacity-50')">
+                    <div class="flex-1 grid grid-cols-12 items-center">
+                        <div class="col-span-6">
+                            <h4 class="font-body-md font-medium text-on-surface ${textClass} group-hover:text-primary transition-colors">${t.title}</h4>
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-secondary mt-1">${t.client}</p>
+                        </div>
+                        <div class="col-span-3 flex justify-center"><span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase ${pColor}">${t.priority}</span></div>
+                        <div class="col-span-3 text-right text-sm text-secondary font-medium">Hạn: ${t.date}</div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // --- OVERLAY LOGIC ---
+    function closeAllOverlays() {
+        document.getElementById('overlay-backdrop').style.opacity = '0';
+        document.getElementById('overlay-backdrop').style.pointerEvents = 'none';
+        
+        // Close Modals
+        const modals = ['modal-create', 'modal-payment', 'modal-settings'];
+        modals.forEach(id => {
+            document.getElementById(id).style.opacity = '0';
+            document.getElementById(id).style.pointerEvents = 'none';
+            document.getElementById(id).style.transform = 'translate(-50%, -50%) scale(0.95)';
+        });
+
+        // Close Drawer
+        document.getElementById('drawer-details').style.transform = 'translateX(100%)';
+
+        // Close Dropdowns
+        document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+    }
+
+    function openModal(id) {
+        closeAllOverlays();
+        document.getElementById('overlay-backdrop').style.opacity = '1';
+        document.getElementById('overlay-backdrop').style.pointerEvents = 'auto';
+        
+        document.getElementById(id).style.opacity = '1';
+        document.getElementById(id).style.pointerEvents = 'auto';
+        document.getElementById(id).style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+
+    function openDrawer(id, name, value, company, stage) {
+        closeAllOverlays();
+        document.getElementById('overlay-backdrop').style.opacity = '1';
+        document.getElementById('overlay-backdrop').style.pointerEvents = 'auto';
+        
+        // Update data
+        document.getElementById('drawer-title').innerText = name;
+        document.getElementById('drawer-value').innerText = value + ' đ';
+        document.getElementById('drawer-company').innerText = company;
+        document.getElementById('drawer-stage').innerText = stage;
+
+        document.getElementById(id).style.transform = 'translateX(0)';
+    }
+
+    function toggleDropdown(id) {
+        const el = document.getElementById(id);
+        const isShowing = el.classList.contains('show');
+        closeAllOverlays();
+        if(!isShowing) {
+            el.classList.add('show');
+        }
+    }
+
+    function toggleWidget(id) {
+        const el = document.getElementById(id);
+        if(el.style.opacity === '1') {
+            el.style.opacity = '0';
+            el.style.pointerEvents = 'none';
+            el.style.transform = 'translateY(1rem)';
+        } else {
+            el.style.opacity = '1';
+            el.style.pointerEvents = 'auto';
+            el.style.transform = 'translateY(0)';
+        }
+    }
+
+    function logout() {
+        closeAllOverlays();
+        const login = document.getElementById('view-login');
+        login.style.display = 'flex';
+        setTimeout(() => login.style.opacity = '1', 50);
+    }
+    
+    function login() {
+        const login = document.getElementById('view-login');
+        login.style.opacity = '0';
+        setTimeout(() => login.style.display = 'none', 500);
+    }
+
+    // --- ROUTING / TAB LOGIC ---
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.view-section');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove active from all nav items
+            navItems.forEach(n => {
+                n.classList.remove('active');
+                n.classList.remove('border-l-[3px]');
+                n.classList.add('border-l-[3px]', 'border-transparent');
+                n.querySelector('.nav-icon').classList.remove('fill-icon');
+            });
+            // Hide all sections
+            sections.forEach(s => s.classList.remove('active'));
+
+            // Add active to clicked nav item
+            item.classList.add('active');
+            item.classList.remove('border-transparent');
+            item.querySelector('.nav-icon').classList.add('fill-icon');
+
+            // Show target section
+            const targetId = item.getAttribute('data-target');
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
+
+    // Close overlays on escape key
+    document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') closeAllOverlays();
+    });
+
+    // Init
+    renderCustomers();
+    renderTasks();
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+TÀI LIỆU YÊU CẦU SẢN PHẨM (PRD) CHI TIẾT – HỆ THỐNG CRM BÁO ĐEN LOGISTICS GIAI ĐOẠN 1
+	•	GIỚI THIỆU DỰ ÁN VÀ TỔNG QUAN KINH DOANH
+1.1. Mục tiêu chiến lược Hệ thống CRM (Quản trị quan hệ khách hàng) của Báo Đen Logistics được thiết kế nhằm mục đích chuẩn hóa toàn bộ quy trình tiếp nhận và chăm sóc khách hàng trong lĩnh vực vận chuyển hàng hóa Trung Quốc - Việt Nam. Mục tiêu hàng đầu của Giai đoạn 1 là xây dựng một "phễu bán hàng" tập trung, nơi mọi thông tin từ số điện thoại, nhu cầu dịch vụ đến lịch sử giao dịch đều được số hóa, thay thế hoàn toàn cho việc quản lý bằng sổ tay hoặc các tệp tin rời rạc.
+1.2. Bối cảnh thị trường Logistics Trung - Việt Đặc thù của ngành mua hàng hộ và vận chuyển quốc tế là lượng khách hàng tiềm năng lớn nhưng tỷ lệ sàng lọc cao. Khách hàng thường quan tâm đến nhiều loại hình dịch vụ khác nhau như: mua hàng trọn gói (Order), vận chuyển đường bộ nhanh, đường biển số lượng lớn hoặc hỗ trợ thủ tục hải quan. Việc không có một hệ thống ghi nhận chính xác "khách hàng này đang cần gì" và "ai đang chăm sóc" dẫn đến lãng phí chi phí marketing và làm giảm trải nghiệm khách hàng.
+	•	CHÂN DUNG NGƯỜI DÙNG VÀ QUY TRÌNH TÁC NGHIỆP
+2.1. Quản trị viên (Admin)
+	•	Trách nhiệm: Giám sát toàn bộ hoạt động kinh doanh, điều phối nhân sự và xử lý các tình huống khi có sự cố dữ liệu.
+	•	Mong muốn: Có cái nhìn tổng thể về hiệu suất của từng nhóm kinh doanh, kiểm soát được việc xuất nhập dữ liệu khách hàng để đảm bảo bảo mật thông tin.
+2.2. Trưởng nhóm kinh doanh (Team Leader)
+	•	Trách nhiệm: Quản lý một nhóm từ 5 đến 10 nhân viên sales. Theo dõi tiến độ chốt đơn của các thành viên để hỗ trợ kịp thời.
+	•	Mong muốn: Xem được bảng tổng hợp công việc của nhóm, biết được khách hàng nào đang bị bỏ quên để nhắc nhở nhân viên.
+2.3. Nhân viên Sales và Chăm sóc khách hàng (CSKH)
+	•	Trách nhiệm: Tiếp nhận khách hàng mới, tư vấn dịch vụ, chuyển đổi khách tiềm năng thành khách hàng thực tế và duy trì mối quan hệ.
+	•	Mong muốn: Một công cụ nhắc lịch làm việc, lưu trữ lịch sử trao đổi để không phải nhớ thủ công quá nhiều thông tin khách hàng.
+	•	HỆ THỐNG QUẢN LÝ TÀI KHOẢN VÀ XÁC THỰC
+3.1. Phương thức đăng nhập đa kênh Hệ thống phải đáp ứng tính linh hoạt cho người dùng văn phòng và tính bảo mật của doanh nghiệp:
+	•	Đăng nhập bằng Email và Mật khẩu: Dành cho những nhân viên ưu tiên sử dụng tài khoản định danh riêng của hệ thống.
+	•	Đăng nhập bằng Google OAuth: Tích hợp trực tiếp với tài khoản Google Workspace của công ty để đăng nhập nhanh chóng chỉ bằng một cú nhấp chuột.
+3.2. Cơ chế hợp nhất tài khoản duy nhất Đây là quy tắc bắt buộc để đảm bảo tính nhất quán của dữ liệu:
+	•	Nhận diện qua Email: Hệ thống sử dụng địa chỉ Email làm mã định danh duy nhất.
+	•	Hợp nhất tự động: Nếu một người dùng đã đăng ký bằng email qua mật khẩu, sau đó thực hiện đăng nhập bằng Google với cùng email đó, hệ thống phải tự động nhận diện và đăng nhập vào cùng một hồ sơ người dùng.
+	•	Ngăn chặn trùng lặp: Không cho phép tạo hai tài khoản khác nhau nếu chúng dùng chung một địa chỉ email, bất kể phương thức đăng nhập là gì. Điều này đảm bảo lịch sử chăm sóc khách hàng của sales không bị chia nhỏ hoặc bị mất khi họ đổi cách đăng nhập.
+3.3. Quy trình khôi phục mật khẩu
+	•	Người dùng có thể yêu cầu đặt lại mật khẩu thông qua email cá nhân.
+	•	Hệ thống gửi một liên kết xác thực có thời hạn (ví dụ 15 phút) để người dùng thiết lập mật khẩu mới.
+	•	CƠ CẤU PHÂN QUYỀN VÀ BẢO MẬT DỮ LIỆU
+Hệ thống phân quyền được thiết lập dựa trên ba tầng truy cập dữ liệu để đảm bảo tính riêng tư và bảo mật thông tin khách hàng của doanh nghiệp.
+4.1. Tầng Admin (Quản trị viên)
+	•	Quyền hạn dữ liệu: Xem, thêm, sửa, xóa toàn bộ dữ liệu trên toàn hệ thống.
+	•	Quản lý người dùng: Có quyền tạo mới tài khoản cho nhân viên, chỉ định vai trò (Role), chuyển nhân viên từ nhóm này sang nhóm khác hoặc khóa tài khoản khi nhân viên nghỉ việc.
+	•	Quản lý hệ thống: Cấu hình các loại dịch vụ, các mức phân đoạn khách hàng.
+4.2. Tầng Trưởng nhóm (Team Leader)
+	•	Quyền hạn dữ liệu: Xem và quản lý toàn bộ khách hàng và cơ hội bán hàng của các nhân viên thuộc nhóm mình quản lý.
+	•	Giám sát: Được quyền xem lịch sử công việc và các ghi chú của nhân viên trong nhóm để đánh giá hiệu quả.
+	•	Giới hạn: Không được xem dữ liệu của các nhóm kinh doanh khác và không thấy được các báo cáo tổng thể của toàn công ty nếu không được Admin cấp quyền riêng lẻ.
+4.3. Tầng Nhân viên Sales / CSKH
+	•	Quyền hạn dữ liệu: Chỉ được xem và thao tác trên danh sách khách hàng do mình trực tiếp tạo ra hoặc được cấp trên bàn giao.
+	•	Giới hạn: Không nhìn thấy danh sách khách hàng của đồng nghiệp cùng nhóm hoặc khác nhóm. Không có quyền xuất dữ liệu ra file Excel (trừ khi được Admin mở quyền đặc biệt).
+	•	CHI TIẾT CÁC MODULE CHỨC NĂNG GIAI ĐOẠN 1
+5.1. Module Tổng quan (Dashboard) Mục tiêu là cung cấp các chỉ số đo lường sức khỏe kinh doanh tức thì:
+	•	Thống kê khách hàng: Tổng số khách hàng mới trong ngày/tuần/tháng.
+	•	Hiệu suất bán hàng: Số lượng cơ hội đã chốt thành công và tỷ lệ chuyển đổi.
+	•	Biểu đồ dịch vụ: Tỷ lệ khách hàng quan tâm đến từng loại dịch vụ (ví dụ: 40% quan tâm đường bộ, 30% quan tâm mua hàng hộ...).
+	•	Nhắc việc: Hiển thị các đầu việc quan trọng cần xử lý ngay trong buổi sáng.
+5.2. Module Danh sách khách hàng (Customer Management) Đây là kho lưu trữ trung tâm cho toàn bộ dữ liệu:
+	•	Chức năng cơ bản: Thêm mới, chỉnh sửa thông tin cá nhân khách hàng, xóa (chỉ dành cho Admin).
+	•	Phân khúc khách hàng: Gắn nhãn Kim cương (khách hàng lớn, tần suất nhập hàng cao), Vàng (khách hàng thường xuyên), Bạc (khách hàng mới hoặc tiềm năng thấp).
+	•	Gắn thẻ dịch vụ quan tâm: Hệ thống cho phép chọn nhiều dịch vụ cùng lúc bao gồm:
+	•	Dịch vụ mua hàng hộ (Order) chính ngạch.
+	•	Dịch vụ mua hàng hộ (Order) tiểu ngạch.
+	•	Dịch vụ vận chuyển đường bộ.
+	•	Dịch vụ vận chuyển đường biển.
+	•	Dịch vụ vận chuyển đường hàng không.
+	•	Dịch vụ khai báo hải quan.
+	•	Nhập liệu hàng loạt: Chức năng tải lên file CSV để đưa danh sách khách hàng từ các nguồn cũ vào hệ thống.
+	•	Trích xuất dữ liệu: Xuất danh sách khách hàng ra file CSV theo bộ lọc (dành cho Admin).
+5.3. Module Cơ hội bán hàng (Kanban Pipeline) Quản lý quy trình chốt đơn theo dạng bảng kéo thả trực quan:
+	•	Cấu trúc bảng: Gồm các cột tương ứng với tiến trình thực tế: Mới tiếp cận, Đang tư vấn, Gửi báo giá, Thương lượng, Đã chốt đơn, Thất bại.
+	•	Thao tác kéo thả: Sales chuyển trạng thái khách hàng bằng cách kéo thẻ khách hàng từ cột này sang cột khác. Hệ thống tự động ghi lại thời điểm chuyển đổi để báo cáo thời gian chăm sóc trung bình.
+	•	Thông tin nhanh trên thẻ: Tên khách hàng, loại dịch vụ quan tâm nhất, giá trị đơn hàng dự kiến.
+5.4. Module Quản lý công việc (Task Management) Giúp nhân viên không bỏ sót khách hàng:
+	•	Tạo công việc gắn với khách hàng: Ví dụ: "Gọi lại tư vấn phí vận chuyển đường biển cho anh A vào 14h chiều mai".
+	•	Phân loại: Gọi điện, Gặp mặt, Gửi email, Soạn hợp đồng.
+	•	Trạng thái: Đang chờ xử lý, Đã hoàn thành, Quá hạn.
+5.5. Module Thanh toán (Payments) Theo dõi dòng tiền giai đoạn đầu:
+	•	Ghi nhận các khoản đặt cọc hoặc thanh toán phí dịch vụ sơ bộ.
+	•	Lưu trữ bằng chứng thanh toán (ghi chú hoặc ảnh chụp hóa đơn).
+	•	Phân loại trạng thái thanh toán để Sales biết khách hàng đã đủ điều kiện để bộ phận kho tiến hành mua hàng hay chưa.
+	•	QUY TẮC DỮ LIỆU VÀ CẤU TRÚC LƯU TRỮ
+Hệ thống sẽ sử dụng nền tảng Supabase để quản lý cơ sở dữ liệu thực tế, đảm bảo các quy tắc sau:
+6.1. Cấu trúc bảng dữ liệu chính
+	•	Bảng Người dùng: Lưu User ID, Email, Role, ID Nhóm, Phương thức đăng nhập.
+	•	Bảng Khách hàng: Lưu thông tin định danh khách hàng, Nhãn phân khúc, Danh sách dịch vụ quan tâm, ID Sales phụ trách.
+	•	Bảng Cơ hội: Lưu trạng thái Kanban, Giá trị dự kiến, Lịch sử chuyển trạng thái.
+	•	Bảng Hoạt động: Lưu lại toàn bộ dấu vết thao tác của người dùng trên hệ thống để kiểm soát khi có vấn đề xảy ra.
+6.2. Chính sách bảo mật mức dòng (Row Level Security) Đây là yêu cầu kỹ thuật quan trọng nhất để thực thi phân quyền:
+	•	Dữ liệu sẽ được lọc ngay từ cấp độ cơ sở dữ liệu dựa trên User ID của người đang đăng nhập. Nhân viên Sales tuyệt đối không thể can thiệp vào mã nguồn để xem dữ liệu không thuộc quyền hạn của mình.
+	•	YÊU CẦU GIAO DIỆN VÀ TRẢI NGHIỆM NGƯỜI DÙNG
+7.1. Phong cách thiết kế
+	•	Ngôn ngữ: Tiếng Việt hoàn toàn, dễ hiểu với người lao động phổ thông và nhân viên văn phòng.
+	•	Màu sắc: Sử dụng tông màu chuyên nghiệp của Báo Đen Logistics (Đen, Xám, màu nhấn mạnh để nổi bật hành động).
+	•	Bố cục: Thanh menu bên trái giúp chuyển đổi nhanh giữa các khu vực Tổng quan, Khách hàng, Cơ hội.
+7.2. Tính tiện dụng
+	•	Tìm kiếm nhanh: Thanh tìm kiếm luôn xuất hiện ở đầu các trang danh sách, cho phép tìm theo Tên khách hàng hoặc Số điện thoại.
+	•	Lọc dữ liệu: Bộ lọc đa năng theo Nhãn khách hàng (Kim cương/Vàng/Bạc) và theo Loại dịch vụ.
+	•	Tốc độ: Các thao tác lưu dữ liệu và chuyển trang phải diễn ra nhanh chóng, không gây cảm giác chờ đợi cho nhân viên khi đang tư vấn khách.
+	•	KẾ HOẠCH TRIỂN KHAI VÀ TIÊU CHÍ NGHIỆM THU
+8.1. Các giai đoạn triển khai dự kiến
+	•	Giai đoạn chuẩn bị (Tuần 1 - 2): Thiết lập cấu trúc dữ liệu trên Supabase và xây dựng hệ thống đăng nhập, phân quyền 3 lớp.
+	•	Giai đoạn xây dựng tính năng (Tuần 3 - 5): Hoàn thiện Module Khách hàng, Kanban và Công việc. Thiết lập chức năng Import/Export file CSV.
+	•	Giai đoạn hoàn thiện (Tuần 6 - 7): Xây dựng Dashboard báo cáo và Module Thanh toán. Tiến hành kiểm tra lỗi trên toàn hệ thống.
+	•	Giai đoạn bàn giao (Tuần 8): Đào tạo sử dụng cho Admin, Trưởng nhóm và Sales. Chạy thử nghiệm thực tế với dữ liệu thật.
+8.2. Tiêu chí nghiệm thu Giai đoạn 1 Dự án được xác nhận hoàn thành khi đáp ứng đủ các điều kiện sau:
+	•	Hệ thống đăng nhập ổn định, không xảy ra tình trạng trùng lặp tài khoản khi dùng Google OAuth.
+	•	Phân quyền hoạt động chính xác: Sales không thấy dữ liệu của nhau, Trưởng nhóm thấy đúng người trong nhóm.
+	•	Chức năng Kanban kéo thả mượt mà, lưu đúng trạng thái vào cơ sở dữ liệu.
+	•	Chức năng Import CSV xử lý được tệp tin có hàng nghìn khách hàng mà không bị treo.
+	•	Dashboard hiển thị đúng các con số thực tế đang có trong hệ thống.
+	•	KẾT LUẬN
+Tài liệu PRD này định hình toàn bộ khung xương cho hệ thống CRM của Báo Đen Logistics trong giai đoạn đầu. Việc tập trung vào quản lý tập trung, phân quyền chặt chẽ và tối ưu hóa quy trình bán hàng sẽ giúp công ty xây dựng một nền tảng dữ liệu khách hàng giá trị. Đây không chỉ là một công cụ phần mềm mà là đòn bẩy để Báo Đen Logistics nâng cao tính chuyên nghiệp và hiệu quả kinh doanh trong thị trường vận chuyển hàng Trung Quốc đầy cạnh tranh.
+

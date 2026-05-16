@@ -1,0 +1,83 @@
+Bản Design Brief này được xây dựng dựa trên tinh thần tối giản hiện đại, tập trung vào trải nghiệm mượt mà và sự tinh tế trong việc hiển thị dữ liệu. Với phong cách Kính mờ (Glassmorphism) và tone Đỏ - Trắng, hệ thống sẽ vừa mang đậm nhận diện thương hiệu Báo Đen, vừa tạo cảm giác nhẹ nhàng, không gây mệt mỏi cho nhân viên khi sử dụng thời gian dài.
+
+1. Bảng màu (Color Palette)
+Hệ thống sử dụng một màu đỏ chủ đạo duy nhất để tạo điểm nhấn, kết hợp với các sắc độ trắng và xám để tạo không gian mở.
+	•	Màu Accent (Đỏ chủ đạo): #D90429 (Đỏ Crimson hiện đại) – Dùng cho các nút hành động quan trọng, trạng thái ưu tiên cao và các con số cần chú ý.
+	•	Màu Nền (Background): #FFFFFF kết hợp với #F8F9FA (Xám trắng cực nhạt).
+	•	Hiệu ứng Kính mờ (Glass Overlay): Trắng với độ trong suốt 70% kết hợp với hiệu ứng Blur (Làm mờ hậu cảnh) 15px - 20px.
+	•	Màu Chữ:
+	•	Tiêu đề chính: #2B2D42 (Xám than đậm).
+	•	Nội dung phụ: #8D99AE (Xám xanh nhạt).
+2. Phông chữ (Typography)
+Sử dụng phông chữ Inter hoặc Montserrat (Biến thể Light và Regular) để đảm bảo tính thẩm mỹ cao.
+	•	Tiêu đề lớn: Font weight 300 (Light), cỡ 28px, khoảng cách ký tự rộng.
+	•	Tiêu đề module: Font weight 400 (Regular), cỡ 20px.
+	•	Văn bản nội dung: Font weight 300, cỡ 14px, dòng cách dòng thoáng (1.6 line-height).
+
+3. Cấu trúc giao diện (Layout Structure)
+Hệ thống được chia thành hai phần chính: Sidebar trái cố định và Vùng nội dung phải mở rộng.
+	•	Trang Tổng quan: Sử dụng các thẻ (Card) lớn, bo góc sâu. Các biểu đồ dạng đường mảnh, không đổ màu khối để giữ sự thanh thoát.
+	•	Cơ hội bán hàng (Kanban): Các cột trạng thái có nền kính mờ nhẹ. Giữa các cột có khoảng cách trắng rộng (32px) để phân tách rõ ràng.
+	•	Danh sách & Thanh toán: Sử dụng bảng (Table) không đường kẻ dọc, chỉ dùng đường kẻ ngang mờ nhạt. Dòng tiêu đề bảng viết hoa toàn bộ với font mỏng.
+	•	Công việc: Thiết kế theo dạng danh sách kiểm tra (Checklist) tối giản, ưu tiên khoảng trắng để người dùng không bị rối mắt.
+	•	Cài đặt: Chia theo tab bên trái, nội dung bên phải, bố cục một cột duy nhất để tập trung.
+
+4. Phong cách các thành phần (Component Style)
+	•	Card (Thẻ): Bo góc 24px, viền 1px màu xám cực nhạt, đổ bóng rất nhẹ (Soft shadow) hoặc sử dụng hiệu ứng kính mờ trên nền sáng.
+	•	Button (Nút):
+	•	Nút chính: Nền đỏ, chữ trắng, bo góc 12px.
+	•	Nút phụ: Viền đỏ mỏng, nền trong suốt, chữ đỏ.
+	•	Input (Ô nhập liệu): Không có khung nền, chỉ có một đường gạch chân mỏng 1px màu xám. Khi chọn vào (Focus), đường gạch chuyển sang màu đỏ.
+	•	Badge (Nhãn trạng thái): Hình viên thuốc (Pill), nền màu nhạt của accent, chữ đỏ đậm, font mỏng.
+	•	Sidebar: Nền trắng tinh khôi, các mục menu có khoảng cách xa nhau. Mục đang chọn sẽ có một vạch đỏ đứng mỏng bên trái.
+	•	Kanban Card: Thẻ nhỏ gọn, chỉ hiển thị thông tin trọng tâm nhất. Sử dụng font chữ rất mỏng cho các mô tả phụ.
+
+5. Dữ liệu mẫu: Yến Sào Vĩnh Hưng
+Để Ban lãnh đạo dễ hình dung, dưới đây là bộ dữ liệu mẫu áp dụng cho ngành Yến sào trên giao diện CRM.
+5.1. Danh sách khách hàng tiềm năng (6 người)
+Tên khách hàng
+Công ty / Đơn vị
+Phân khúc
+Sản phẩm quan tâm
+Giá trị dự kiến (VND)
+Nguyễn Thị Minh Tú
+Đại lý Quà tặng Cao cấp
+Kim cương
+Dịch vụ vận chuyển đường biển
+500.000.000
+Trần Hoàng Nam
+Chuỗi nhà hàng Hải sản
+Vàng
+Dịch vụ khai báo hải quan
+120.000.000
+Phạm Thanh Thủy
+Yến Sào Vĩnh Hưng (Nội bộ)
+Vàng
+Dịch vụ order chính ngạch
+85.000.000
+Lê Văn Hòa
+Shop Thực phẩm Sạch
+Bạc
+Dịch vụ vận chuyển đường bộ
+45.000.000
+Đặng Thu Thảo
+Cá nhân (Kinh doanh online)
+Bạc
+Dịch vụ order tiểu ngạch
+25.000.000
+Ngô Quốc Bảo
+Xuất nhập khẩu Gia đình
+Kim cương
+Vận chuyển hàng không nhanh
+210.000.000
+5.2. Danh sách công việc (5 việc)
+	•	Việc 1: Gửi báo giá vận chuyển 200kg tổ yến thô qua đường biển cho đại lý Minh Tú. (Ưu tiên: Cao - Hạn: 15/05/2026).
+	•	Việc 2: Kiểm tra hồ sơ khai báo hải quan cho lô hàng yến tinh chế của anh Hoàng Nam. (Ưu tiên: Trung bình - Hạn: 16/05/2026).
+	•	Việc 3: Gọi điện tư vấn quy trình nhập khẩu chính ngạch từ Quảng Đông cho chi nhánh nội bộ. (Ưu tiên: Cao - Hạn: 14/05/2026).
+	•	Việc 4: Gửi mẫu hợp đồng vận chuyển đường bộ cho shop Lê Văn Hòa. (Ưu tiên: Thấp - Hạn: 18/05/2026).
+	•	Việc 5: Cập nhật trạng thái nạp tiền ký quỹ của khách hàng Đặng Thu Thảo. (Ưu tiên: Trung bình - Hạn: 15/05/2026).
+5.3. Nhóm danh sách khách hàng (Phân loại theo Yến Sào Vĩnh Hưng)
+	•	Nhóm Khách sỉ Miền Nam: Tập trung các đại lý nhập hàng số lượng lớn theo container hoặc xe tải từ kho Trung Quốc về kho TP.HCM.
+	•	Nhóm Khách mua hộ (Personal Shopper): Những người chuyên order lẻ các loại phụ kiện nhặt yến, hộp đựng cao cấp từ Taobao/1688.
+	•	Nhóm Khách chính ngạch (Doanh nghiệp): Các công ty cần đầy đủ hóa đơn, giấy tờ kiểm định và khai báo hải quan chuyên sâu cho mặt hàng thực phẩm.
+
